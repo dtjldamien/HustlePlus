@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <ui:define name="content">
+        
+        <h:panelGroup rendered="#{!sessionScope.isLogin}">
+            <article>
+                <center><h2>Please login.</h2></center>
+            </article>
+        </h:panelGroup>
+        
+        <div class="container" style="width: 95%">
+            
+            <h:form id="formAllProjects" rendered="#{sessionScope.isLogin == true}">
+            
+                <p:messages id="messages" redisplay="false" closable="true" />
+
+                <p:dataTable id="dataTableAllProjects" widgetVar="dataTableAllProjects" value="#{getAllProjectsManagedBean.projectsForCompany}" var="project" rowKey="#{project.projectId}" rowIndexVar="row"
+                             rows="5" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,15">
+                    
+                    <f:facet name="header">
+                        <p:outputPanel style="text-align: center;">
+                            <h:outputText value="Search " />
+                            <p:inputText id="globalFilter" onkeyup="PF('dataTableAllProjects').filter()" style="width:200px" placeholder=""/>
+                        </p:outputPanel>
+                    </f:facet>
+                    
+                    <p:column headerText="Project ID" sortBy="#{project.projectId}" filterBy="#{project.projectId}" filterMatchMode="contains">
+                        <h:outputText value="#{project.projectId}" />
+                    </p:column>
+
+                    
+                    <p:column headerText="Project Name" sortBy="#{project.projectName}" filterBy="#{project.projectName}" filterMatchMode="startsWith" >
+                        <h:outputText value="#{project.projectName}" />
+                    </p:column>
+                    
+                   
+                    <p:column headerText="Action" >
+                        <p:commandButton update="ccViewProject:formViewProject" oncomplete="PF('dialogViewProject').show()" icon="ui-icon-document" title="View" action="#{projectManagementManagedBean.setStatusText}">
+                            <f:setPropertyActionListener value="#{project}" target="#{projectManagementManagedBean.projectToView}" />
+                            <f:setPropertyActionListener value="#{project}" target="#{projectManagementManagedBean.viewProjectManagedBean.projectToView}"/>
+                        </p:commandButton>
+                        <p:commandButton  actionListener="#{projectManagementManagedBean.doUpdateProject}" update="formUpdateProject" oncomplete="PF('dialogUpdateProject').show()" icon="ui-icon-pencil" title="Update">
+                            <f:attribute name="projectToUpdate" value="#{project}" />
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-trash" actionListener="#{projectManagementManagedBean.deleteProject}" update="formAllProjects:dataTableAllProjects formAllProjects:messages">
+                            <f:attribute name="projectToDelete" value="#{project}" />
+                            <p:confirm header="Confirmation" message="Are you sure you want to delete Project: #{project.projectName}?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                    
+                    </p:dataTable>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+                
+            </h:form>
+            
+            <ez:ViewProject id="ccViewProject" />
+
+            <h:form id="formUpdateProject">
+                <p:growl id="msgs"/> 
+
+                <p:dialog id="dialogUpdateProject" widgetVar="dialogUpdateProject" header="Update Project" closable="true">
+
+                    <p:messages id="messagesUpdateProject" redisplay="false" />
+
+                    <p:panelGrid>
+
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Project ID: " />
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{projectManagementManagedBean.selectedProjectToUpdate.projectId}" />
+                            </p:column>
+                            <p:column>
+                                &nbsp;
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="projectName" value="Project Name: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="projectName" value="#{projectManagementManagedBean.selectedProjectToUpdate.projectName}" placeholder="e.g. Project Name" required="true" requiredMessage="Project Name is required!" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="projectName" />
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="jobValue" value="Job Value: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="jobValue" value="#{projectManagementManagedBean.selectedProjectToUpdate.jobValue}" placeholder="e.g. 800" required="true" requiredMessage="Job Value is required!" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="jobValue" />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="numStudentsRequired" value="Number of Students Required: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="numStudentsRequired" value="#{projectManagementManagedBean.selectedProjectToUpdate.numStudentsRequired}" placeholder="e.g. 3" required="true" requiredMessage="Number of Students is required!" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="numStudentsRequired" />
+                            </p:column>
+                        </p:row>
+
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="projectDescription" value="Project Description: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="projectDescription" value="#{projectManagementManagedBean.selectedProjectToUpdate.projectDescription}" placeholder="e.g. Project Description" required="true" requiredMessage="Project Description is required!" />
+                            </p:column>
+                            <p:column>
+                                <p:message for="projectDescription" />
+                            </p:column>
+                        </p:row>  
+                        
+                        <p:row>
+                        <p:column>
+                            <p:outputLabel for="startDate" value="Project Start Date" style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                             <p:datePicker id="startDate" value="#{projectManagementManagedBean.selectedProjectToUpdate.startDate}" required="true" requiredMessage="Start Date is required!" />
+                        </p:column>
+                            <p:column>
+                                <p:message for="startDate" />
+                            </p:column>                    
+                        </p:row>
+                   
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="endDate" value="Project End Date" style="font-weight: bold;"/>
+                        </p:column>
+                        <p:column>
+                          <p:datePicker id="endDate" value="#{projectManagementManagedBean.selectedProjectToUpdate.endDate}" required="true" requiredMessage="End Date is required!" />
+                        </p:column>
+                            <p:column>
+                                <p:message for="endDate" />
+                            </p:column> 
+                    </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="projectStatus" value="Project Status " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:selectBooleanButton id="projectStatus" value="#{projectManagementManagedBean.statusValue}" onLabel="Completed" offLabel="Not Completed" onIcon="pi pi-check" offIcon="pi pi-times" style="width:200px">
+                                <p:ajax update="msgs" listener="#{projectManagementManagedBean.addMessageForStatus}"/>
+                                <p:ajax listener="#{projectManagementManagedBean.changeProjectStatus}"/>
+                                </p:selectBooleanButton>
+                            </p:column>
+                            <p:column>
+                                <p:message for="projectStatus" />
+                            </p:column>
+                        </p:row>  
+                        
+                       <p:row>
+                        <p:column>
+                            <p:outputLabel for="projectMilestone" value="Project Milestones" style="font-weight: bold;"/>
+                        </p:column>
+                        <p:column>
+                            <p:commandButton id="projectMilestone" value="Add Milestones" actionListener="#{milestoneManagementManagedBean.updateProjectMilestone}">
+                                <f:attribute name="selProjectToAddMilestone" value="#{projectManagementManagedBean.selectedProjectToUpdate}"/>
+                                <f:attribute name="companyToView" value="#{sessionScope.userEntity}"/>
+                            </p:commandButton>
+                        </p:column>
+                            <p:column>
+                                <p:message for="projectMilestone" />
+                            </p:column> 
+                    </p:row>
+                        
+                                                
+                        <p:row>
+                         <h:panelGrid columns="4" cellpadding="5">
+                        
+                            <p:outputLabel for="skills" value="Required Skills: * " />
+                            <p:selectCheckboxMenu id="skills" value="#{projectManagementManagedBean.skillIdsToAddToSelectedProjectToUpdate}" label="Skills"
+                                                  multiple="true" filter="true" filterMatchMode="startsWith" panelStyle="250px">
+                                <f:selectItems value="#{projectManagementManagedBean.skills}" var="skill" itemLabel="#{skill.title}" itemValue="#{skill.skillId}" />
+                            </p:selectCheckboxMenu>
+                            <p:commandButton immediate="true" value="Add Skill" action="/companies/addASkillProjectManagement.xhtml?faces-redirect=true"/>
+                            <p:commandButton value="Remove Skill From Project" actionListener="#{projectManagementManagedBean.deleteSkillFromProject}">
+                                <f:attribute name="projectToDeleteSkill" value="#{projectManagementManagedBean.selectedProjectToUpdate}"/>
+                            </p:commandButton>
+                            </h:panelGrid>
+                    </p:row>
+                        
+                        
+  
+                        <p:row>
+                            <p:column colspan="3">
+                                <p:commandButton value="Update Project" update="@form formUpdateProject" actionListener="#{projectManagementManagedBean.updateProject}" oncomplete="PF('dialogUpdateProject').show();" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+            
+        </div>
+        
+    </ui:define>
+    
+</ui:composition>
+

@@ -1,0 +1,58 @@
+<ion-header>
+
+  <ion-toolbar class="header">
+    <ion-buttons slot="start">
+      <ion-button class="back" (click)="back()">
+        <ion-icon slot="start" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>View Team Details</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-card>
+
+    <ion-card-content>
+
+      <div *ngIf="retrieveTeamError == true" style="color: red;">
+        Team ID {{team}} does not exist!
+      </div>
+
+      <ion-list *ngIf="retrieveTeamError == false && teamToView != null">
+
+        <ion-item>
+          <ion-label><b>{{teamToView.teamName}}</b></ion-label>
+        </ion-item>
+
+
+          <div style="text-align: center;">
+            <ion-row *ngFor="let student of teamToView.students">
+              <ion-col>
+                <h2>{{student.name}}</h2>
+              </ion-col>
+              <ion-col>
+                <ion-button size="small" item-end (click)="removeStudent($event, student)">
+                  <ion-icon item-end name="person-remove-outline"></ion-icon>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </div>
+
+        <ion-item></ion-item>
+        <br>
+
+        <ion-button expand="block" (click)="deleteTeam()">
+          Delete Team
+        </ion-button>
+
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer>
+  <ion-title size="small">&copy; 2020 HustlePlus. All rights reserved.</ion-title>
+</ion-footer>

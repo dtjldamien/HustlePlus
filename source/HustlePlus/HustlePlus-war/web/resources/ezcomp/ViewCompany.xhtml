@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <cc:interface>
+    </cc:interface>
+    
+    <cc:implementation>
+        
+        <h:form id="formViewCompany">
+            
+            <p:dialog id="dialogViewCompany" widgetVar="dialogViewCompany" header="View Company" closable="true">
+
+                <p:panelGrid>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Company ID: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewCompanyManagedBean.companyToView.userId}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Profile Picture: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewCompanyManagedBean.companyToView.icon}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Name: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewCompanyManagedBean.companyToView.name}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Username: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewCompanyManagedBean.companyToView.username}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Email: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewCompanyManagedBean.companyToView.email}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Description: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewCompanyManagedBean.companyToView.description}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Average Rating: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewCompanyManagedBean.companyToView.avgRating}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Verified: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewCompanyManagedBean.companyToView.isVerified}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Suspended: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{viewCompanyManagedBean.companyToView.isSuspended}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Reviews: " />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value="Student Reviews" actionListener="#{viewCompanyManagedBean.reviews}"/>
+                        </p:column>
+                    </p:row>
+                    
+                </p:panelGrid>
+
+            </p:dialog>
+            
+        </h:form>
+        
+    </cc:implementation>
+</html>

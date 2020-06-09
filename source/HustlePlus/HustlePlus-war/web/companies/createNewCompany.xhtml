@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+     
+    <h:head>
+        <title>Hustle+ - Sign Up for Companies</title>
+    </h:head>
+    <h:body style="background-image: url('http://localhost:8080/HustlePlus-war/resources/img/website-login-background-3.jpg');">
+        
+        <p:panel header="Create a new account">
+            <h:form id="signUpForm"> 
+                <p:messages/>
+                
+                <p:panelGrid>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="companyName" value="Company Name" style="font-weight: bold"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="companyName" value="#{companyManagementManagedBean.newCompany.name}" required="true" requiredMessage="Company Name required"/>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="email" value="Email" style="font-weight: bold"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="email" value="#{companyManagementManagedBean.newCompany.email}" validatorMessage="Invalid Email Format" required="true" requiredMessage="Email required" >
+                                 <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+                   
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="username" value="Username" style="font-weight: bold"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="username" value="#{companyManagementManagedBean.newCompany.username}" required="true" requiredMessage="Username required"/>
+                        </p:column>
+                    </p:row>
+                    
+                     <p:row>
+                        <p:column>
+                            <p:outputLabel for="password" value="Password" style="font-weight: bold"/>
+                        </p:column>
+                        <p:column>
+                            <p:password id="password" value="#{companyManagementManagedBean.newCompany.password}" required="true" requiredMessage="Password required" />
+                        </p:column>
+                    </p:row>
+                    
+
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="description" value="Description" style="font-weight: bold"/>
+                        </p:column>
+                        <p:column>
+                            <p:inputText id="description" value="#{companyManagementManagedBean.newCompany.description}"  />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="icon" value="Profile Picture" style="font-weight: bold" />
+                        </p:column>
+                        <p:column>
+                            <p:panel id="icon">
+                                        Maximum File Size: 5MB
+                                        <p:fileUpload mode="advanced" fileUploadListener="#{companyManagementManagedBean.uploadPicture}" sizeLimit="5000000" />
+                            </p:panel>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column colspan="2">
+                            <p:commandButton type="reset" value="Clear" />
+                            <p:commandButton ajax="false" type="submit" value="Create" process="@form" update="@form" actionListener="#{companyManagementManagedBean.createNewCompany}" />
+                            <p:commandButton immediate="true" value="Cancel" action="/login.xhtml?faces-redirect=true"/>
+                        </p:column>
+                    </p:row>
+                    
+                    
+                    
+                        
+                </p:panelGrid>
+
+            </h:form>
+
+        </p:panel>
+        
+        
+    </h:body>
+</html>
+

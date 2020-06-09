@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <ui:define name="content">
+        
+        <h:panelGroup rendered="#{!sessionScope.isLogin}">
+            <article>
+                <center><h2>Please login.</h2></center>
+            </article>
+        </h:panelGroup>
+        
+        <div class="container" style="width: 95%">
+            
+            <h:form id="formAllReviews" rendered="#{sessionScope.isLogin == true}">
+            
+                <p:messages id="messages" redisplay="false" closable="true" />
+
+                <p:dataTable id="dataTableAllReviews" widgetVar="dataTableAllReviews" value="#{reviewManagementManagedBean.allStudentReviews}" var="review" rowKey="#{review.studentReviewId}" rowIndexVar="row"
+                             rows="10" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,15">
+                    
+                    <f:facet name="header">
+                        <p:outputPanel style="text-align: center;">
+                            <h:outputText value="Search " />
+                            <p:inputText id="globalFilter" onkeyup="PF('dataTableAllReviews').filter()" style="width:200px" placeholder=""/>
+                        </p:outputPanel>
+                       </f:facet>
+                    
+                    <p:column headerText="Review ID" sortBy="#{review.studentReviewId}" filterBy="#{review.studentReviewId}" filterMatchMode="contains">
+                        <h:outputText value="#{review.studentReviewId}" style="float:left" />                    
+                    </p:column>
+                    
+                    <p:column headerText="Name of Student" sortBy="#{review.studentReviewed.name}" filterBy="#{review.studentReviewed.name}" filterMatchMode="contains">
+                        <h:outputText value="#{review.studentReviewed.name}" style="float:center"/>
+                    </p:column>
+                    
+                    <p:column headerText="Rating" sortBy="#{review.rating}" filterBy="#{review.rating}" filterMatchMode="contains">
+                        <h:outputText value="#{review.rating}" style="float:right">
+                            <f:convertNumber maxFractionDigits="2"/>
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Action" >
+                        <p:commandButton update="formViewReview" oncomplete="PF('dialogViewReview').show()" icon="ui-icon-document" title="View">
+                            <f:setPropertyActionListener value="#{review}" target="#{reviewManagementManagedBean.reviewToView}" />
+                        </p:commandButton>
+                        <p:commandButton actionListener="#{reviewManagementManagedBean.doUpdateReview}" update="formUpdateReview" oncomplete="PF('dialogUpdateReview').show()" icon="ui-icon-pencil" title="Update">
+                            <f:attribute name="reviewToUpdate" value="#{review}" />
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-trash" actionListener="#{reviewManagementManagedBean.deleteReview}" update="formAllReviews:dataTableAllReviews formAllReviews:messages">
+                            <f:attribute name="reviewToDelete" value="#{review}" />
+                            <p:confirm header="Confirmation" message="Are you sure you want to delete Review #{review.studentReviewId}?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                    
+                    </p:dataTable>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+                
+            </h:form>
+            
+            <h:form id="formViewReview">
+                
+                <p:dialog id="dialogViewReview" widgetVar="dialogViewReview" header="View Review" closable="true">
+
+                <p:panelGrid>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Review ID: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{reviewManagementManagedBean.reviewToView.studentReviewId}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Name of Student: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{reviewManagementManagedBean.reviewToView.studentReviewed.name}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Rating: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{reviewManagementManagedBean.reviewToView.rating}">
+                                 <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Comments: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{reviewManagementManagedBean.reviewToView.reviewText}" escape="false"/>
+                        </p:column>
+                        
+                    </p:row>
+                    
+                </p:panelGrid>
+
+            </p:dialog>
+            
+        </h:form>
+                
+
+           <h:form id="formUpdateReview">
+                 
+
+                <p:dialog id="dialogUpdateReview" widgetVar="dialogUpdateReview" header="Update Review" closable="true">
+
+                    <p:messages id="messagesUpdateReview" redisplay="false" />
+
+            <h:panelGrid columns="2" cellpadding="5">
+
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Review ID: " />
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{reviewManagementManagedBean.selectedReviewToUpdate.studentReviewId}" />
+                            </p:column>
+
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                             <h:outputLabel value="Rating: "></h:outputLabel>  
+                            </p:column>
+                            <p:column>
+                             <p:rating value="#{reviewManagementManagedBean.selectedReviewToUpdate.rating}" required="true"/>
+                            </p:column>
+
+                        </p:row>
+                        
+                        <p:row>
+                            <h:outputLabel value="Your Review " for="reviewTxt"></h:outputLabel>
+                <p:textEditor widgetVar="editor" value="#{reviewManagementManagedBean.selectedReviewToUpdate.reviewText}" height="200" style="margin-bottom:10px; margin-top:10px; width: 500px" placeholder="Type here" required="true">
+                    <f:validateLength minimum="10" />
+                    <f:facet name="toolbar">
+                         <span class="ql-formats">
+                            <button class="ql-bold"></button>
+                            <button class="ql-italic"></button>
+                            <button class="ql-underline"></button>
+                            <button class="ql-strike"></button>
+                        </span>
+
+                    </f:facet>
+                </p:textEditor>
+                        </p:row>
+     
+                        <p:row>
+                            <p:column colspan="3">
+                                <p:commandButton ajax="false" value="Update Review" update="@form formUpdateReview" actionListener="#{reviewManagementManagedBean.updateReview}" oncomplete="PF('dialogUpdateReview').show();" />
+                            </p:column>
+                        </p:row>
+
+                    </h:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+
+            
+        </div>
+        
+    </ui:define>
+    
+</ui:composition>
+

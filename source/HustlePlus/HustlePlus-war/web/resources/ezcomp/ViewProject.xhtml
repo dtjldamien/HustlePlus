@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <cc:interface>
+    </cc:interface>
+    
+    <cc:implementation>
+        
+        <h:form id="formViewProject">
+            
+            <p:dialog id="dialogViewProject" widgetVar="dialogViewProject" header="View Project" closable="true">
+
+                <p:panelGrid>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Project ID: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{projectManagementManagedBean.projectToView.projectId}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Project Name: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{projectManagementManagedBean.projectToView.projectName}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Job Value: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{projectManagementManagedBean.projectToView.jobValue}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="No. Students: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{projectManagementManagedBean.projectToView.numStudentsRequired}" />
+                        </p:column>
+                        
+                    </p:row>
+                    
+                         <p:row>
+                            <p:column>
+                                <p:outputLabel value="Skills Required: " style="font-weight: bold;" />
+                            </p:column>
+                            <p:column>
+                                <p:dataList value="#{projectManagementManagedBean.projectToView.skills}" var="skill">
+                                    #{skill.title}
+                                </p:dataList>
+                            </p:column>
+
+                        </p:row>   
+                    
+                    
+                    
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Project Description: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{projectManagementManagedBean.projectToView.projectDescription}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Start Date: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{projectManagementManagedBean.projectToView.startDate}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Due Date: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{projectManagementManagedBean.projectToView.endDate}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:row>
+                    
+                     <p:row>
+                        <p:column>
+                            <h:outputLabel value="Status: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{projectManagementManagedBean.displayStatus}" />
+                        </p:column>
+                    </p:row>
+                    
+                 <p:row>
+                        <p:column>
+                            <h:outputLabel value="Team: " />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value="View Team " actionListener="#{getTeamForProjectManagedBean.retrieveTeamForProject}">
+                                <f:attribute name="projectToViewTeam" value="#{projectManagementManagedBean.projectToView}"/>
+                            
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+                    
+                    
+                      <p:row>
+                        <p:column>
+                            <h:outputLabel value="Applications: " />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value="View Applications" actionListener="#{getApplicationForProjectManagedBean.retrieveApplicationsForProject}">
+                                <f:attribute name="projectToViewApp" value="#{projectManagementManagedBean.projectToView}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+                    
+                   <p:row>
+                        <p:column>
+                            <h:outputLabel value="Reviews: " />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value="Reviews of Student" actionListener="#{getReviewsForProjectManagedBean.retrieveReviewsForStudents}">
+                                <f:attribute name="projectToViewReview" value="#{projectManagementManagedBean.projectToView}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Reviews: " />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value="Reviews Of Project" actionListener="#{getReviewsForProjectManagedBean.retrieveReviewsForProject}">
+                                <f:attribute name="projectToViewReview" value="#{projectManagementManagedBean.projectToView}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+                    
+                  <p:row>
+                        <p:column>
+                            <h:outputLabel value="Milestones: " />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value="View Milestones" actionListener="#{getMilestonesManagedBean.retrieveMilestonesForProject}">
+                                <f:attribute name="projectToView" value="#{projectManagementManagedBean.projectToView}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Payments " />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value="View Payments" actionListener="#{paymentManagementManagedBean.retrievePayments}">
+                                <f:attribute name="projectToView" value="#{projectManagementManagedBean.projectToView}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+                    
+           </p:panelGrid>
+
+            </p:dialog>
+            
+        </h:form>
+        
+      
+        
+    </cc:implementation>
+</html>

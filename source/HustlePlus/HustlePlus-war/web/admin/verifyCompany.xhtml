@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+                
+        <div>
+            <h:form id="formAllCompanies">
+                
+                 <p:messages id="messages" redisplay="false" closable="true" />
+
+
+                <p:dataTable id="dataTableAllCompanies" widgetVar="dataTableAllCompanies" value="#{companyManagementManagedBean.companies}" var="company" rowKey="#{company.userId}" rowIndexVar="row" filteredValue="#{companyManagementManagedBean.filteredCompanies}"  
+                             rows="10" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+                    
+                    <f:facet name="header">
+                        <p:outputPanel style="text-align: center;">
+                            <h:outputText value="Search " />
+                            <p:inputText id="globalFilter" onkeyup="PF('dataTableAllCompanies').filter()" style="width:200px"/>
+                        </p:outputPanel>
+                    </f:facet>
+                    
+                    
+                    <p:column headerText="Company ID" sortBy="#{company.userId}" filterBy="#{company.userId}" filterMatchMode="contains">
+                        <h:outputText value="#{company.userId}" />
+                    </p:column>
+                    
+                    <p:column headerText="Company Name" sortBy="#{company.name}" filterBy="#{company.name}" filterMatchMode="contains">
+                        <h:outputText value="#{company.name}" />
+                    </p:column>
+                    
+                    <p:column headerText="Username" sortBy="#{company.username}" filterBy="#{company.username}" filterMatchMode="contains">
+                        <h:outputText value="#{company.username}" />
+                    </p:column>
+                    
+                    <p:column headerText="Average Rating" sortBy="#{company.avgRating}" filterBy="#{company.avgRating}" filterMatchMode="contains">
+                        <h:outputText value="#{company.avgRating}" />
+                    </p:column>                    
+                    
+                     <p:column headerText="View Company Details">
+                        <p:commandButton update="formViewCompany" oncomplete="PF('dialogViewCompany').show()" icon="ui-icon-document" title="View Company Details">
+                            <f:setPropertyActionListener value="#{company}" target="#{companyManagementManagedBean.companyToView}" />
+                        </p:commandButton>
+                    </p:column>
+                    
+                    <p:column headerText="Action" >  
+                        <p:commandButton actionListener="#{companyManagementManagedBean.verifyCompany}" value="Verify" update="formAllCompanies:dataTableAllCompanies formAllCompanies:messages">
+                            <f:attribute name="selectedCompanyToVerify" value="#{company}" />
+                            <p:confirm header="Confirmation" message="Are you sure you want to verify #{company.name} (Company ID #{company.userId})?" icon="ui-icon-alert"/>
+                        </p:commandButton>
+                            <br />
+                       <br /> 
+                        <p:commandButton actionListener="#{companyManagementManagedBean.suspendCompany}" value="Suspend" update="formAllCompanies:dataTableAllCompanies formAllCompanies:messages">
+                            <f:attribute name="selectedCompanyToSuspend" value="#{company}" />
+                            <p:confirm header="Confirmation" message="Are you sure you want to suspend #{company.name} (Company ID: #{company.userId})?" icon="ui-icon-alert"/>
+                        </p:commandButton>                
+                    </p:column>  
+
+                </p:dataTable>
+                
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
+            </h:form>
+            
+            <h:form id="formViewCompany">
+            
+            <p:dialog id="dialogViewCompany" widgetVar="dialogViewCompany" header="View Company" closable="true">
+
+                <p:panelGrid>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Company ID: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{companyManagementManagedBean.companyToView.userId}" />
+                        </p:column>
+                    </p:row>
+
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Company Name: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{companyManagementManagedBean.companyToView.name}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Email: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{companyManagementManagedBean.companyToView.email}" />
+                        </p:column>
+                    </p:row>
+                    
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Rating: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{companyManagementManagedBean.companyToView.avgRating}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Description: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{companyManagementManagedBean.companyToView.description}" />
+                        </p:column>
+                    </p:row>
+                                        
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Verified: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{companyManagementManagedBean.companyToView.isVerified}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Suspended " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{companyManagementManagedBean.companyToView.isSuspended}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Reviews: " />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value="Student Reviews" actionListener="#{companyManagementManagedBean.retrieveAllReviews}">
+                                <f:attribute name="selectedCompany" value="#{companyManagementManagedBean.companyToView}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+                    
+                </p:panelGrid>
+
+            </p:dialog>
+            
+        </h:form>
+
+    
+        </div>
+        
+    </ui:define>
+
+</ui:composition>

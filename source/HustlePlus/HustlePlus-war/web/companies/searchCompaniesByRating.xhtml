@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <ui:define name="content">
+
+        <div class="container" style="text-align: center">                       
+
+            <h:form id="formMain" rendered="#{sessionScope.isLogin == true}">
+
+                <div style="text-align: center">
+                
+                    <p:inputText id="txtSearchString" value="#{searchCompaniesByRatingManagedBean.searchString}" style="font-size: large;" placeholder="Enter Rating">
+                        <p:ajax event="keyup" process="@this" update="formMain:dataTableMain" listener="#{searchCompaniesByRatingManagedBean.searchCompany}" />
+                    </p:inputText>
+                  
+
+                </div>
+
+                <br />
+                
+                <p:dataTable id="dataTableMain" widgetVar="dataTableMain" value="#{searchCompaniesByRatingManagedBean.companies}" var="company" rowKey="#{company.userId}" rowIndexVar="row"                             
+                             rows="10" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50" >
+                    
+                    <p:column headerText="Company ID" sortBy="#{company.userId}">
+                        <h:outputText value="#{company.userId}" />
+                    </p:column>
+                    
+                    <p:column headerText="Company Name" sortBy="#{company.name}">
+                        <h:outputText value="#{company.name}" />
+                    </p:column>                          
+                    
+                    <p:column headerText="Email" sortBy="#{company.email}">
+                        <h:outputText value="#{company.email}" />
+                    </p:column>
+                    
+                    <p:column headerText="Rating" sortBy="#{company.avgRating}">
+                        <h:outputText value="#{company.avgRating}" />
+                    </p:column>
+
+                    <p:column headerText="View Details" >
+                        <p:commandButton update="formViewCompany" oncomplete="PF('dialogViewCompany').show()" icon="ui-icon-document" title="View Company Details">
+                            <f:setPropertyActionListener value="#{company}" target="#{searchCompaniesByRatingManagedBean.companyToView}" />
+                        </p:commandButton>                        
+                    </p:column>
+
+                </p:dataTable>
+                                
+            </h:form>
+
+           <h:form id="formViewCompany">
+            
+            <p:dialog id="dialogViewCompany" widgetVar="dialogViewCompany" header="View Company" closable="true">
+
+                <p:panelGrid>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Company ID: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{searchCompaniesByRatingManagedBean.companyToView.userId}" />
+                        </p:column>
+                    </p:row>
+
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Company Name: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{searchCompaniesByRatingManagedBean.companyToView.name}" />
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Email: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{searchCompaniesByRatingManagedBean.companyToView.email}" />
+                        </p:column>
+                    </p:row>
+                    
+
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Rating: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{searchCompaniesByRatingManagedBean.companyToView.avgRating}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Description: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{searchCompaniesByRatingManagedBean.companyToView.description}" />
+                        </p:column>
+                    </p:row>
+                                        
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Verified: " />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{searchCompaniesByRatingManagedBean.companyToView.isVerified}" />
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column>
+                            <h:outputLabel value="Reviews: " />
+                        </p:column>
+                        <p:column>
+                            <p:commandButton value="Student Reviews" actionListener="#{companyManagementManagedBean.retrieveAllReviews}">
+                                <f:attribute name="selectedCompany" value="#{searchCompaniesByRatingManagedBean.companyToView}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+                    
+                </p:panelGrid>
+
+            </p:dialog>
+            
+        </h:form>
+            
+        </div>
+        
+    </ui:define>
+    
+</ui:composition>

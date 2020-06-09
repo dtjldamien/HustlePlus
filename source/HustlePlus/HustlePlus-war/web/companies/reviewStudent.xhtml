@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+   
+    <ui:define name="top">
+        <title>Hustle+ - New Student Review</title>
+    </ui:define>
+    
+    <ui:define name="content">
+        
+        <h:form id="reviewStudent">
+        <p:messages id="msgs"/>
+
+        <p:panel header="New Student Review" style="margin-bottom:20px">
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="project" value="Project" />
+                <p:selectOneMenu id="project" value="#{reviewManagementManagedBean.selProjectId}" style="width: 125px" required="true">
+                    <f:selectItem itemLabel="Select One" itemValue=" "/>
+                    <f:selectItems value="#{reviewManagementManagedBean.projectsCompanyHas}"  var="project" itemLabel="#{project.projectName}" itemValue="#{project.projectId}" />
+                </p:selectOneMenu> 
+                <p:outputLabel for="student" value="Student" />
+                <p:selectOneMenu id="student" value="#{reviewManagementManagedBean.studentIdToReview}" style="width: 125px" required="true">
+                    <f:selectItem itemLabel="Select One" itemValue=" "/>
+                    <f:selectItems value="#{reviewManagementManagedBean.studentsInProjects}"  var="student" itemLabel="#{student.name}" itemValue="#{student.userId}" />
+                </p:selectOneMenu> 
+                <h:outputLabel value="Rating *" for="rating" ></h:outputLabel>   
+                <p:rating value="#{reviewManagementManagedBean.newStudentReview.rating}" required="true">
+                    <p:ajax event="rate" listener="#{reviewManagementManagedBean.onrate}" update="msgs" />
+                </p:rating>
+                <h:outputLabel value="Your Review *" for="reviewTxt"></h:outputLabel>
+                <p:textEditor widgetVar="editor" value="#{reviewManagementManagedBean.newStudentReview.reviewText}" height="200" style="margin-bottom:10px; margin-top:10px; width: 500px; background-color: white; color: black;" placeholder="Type here" required="true">
+                    <f:validateLength minimum="10" maximum="256" />
+                    <f:facet name="toolbar">
+                         <span class="ql-formats">
+                            <button class="ql-bold"></button>
+                            <button class="ql-italic"></button>
+                            <button class="ql-underline"></button>
+                            <button class="ql-strike"></button>
+                        </span>
+
+                    </f:facet>
+                </p:textEditor>
+
+                <p:commandButton immediate="true" value="Back" action="/index.xhtml?faces-redirect=true"/>
+                <p:commandButton value="Submit" ajax="false" update="msgs" actionListener="#{reviewManagementManagedBean.createNewReview}">
+                    <f:attribute name="cReviewing" value="#{sessionScope.userEntity}"/>
+                </p:commandButton>
+
+            </h:panelGrid>
+        </p:panel>
+
+        </h:form>
+        
+    </ui:define>
+
+</ui:composition>
+

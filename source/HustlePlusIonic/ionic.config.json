@@ -1,0 +1,7 @@
+{
+  "name": "HustlePlusIonic",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

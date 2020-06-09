@@ -1,0 +1,89 @@
+<ion-header>
+
+  <ion-toolbar class="header">
+    <ion-buttons slot="start">
+      <ion-button class="back" (click)="back()">
+        <ion-icon slot="start" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>View Student Details</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content>
+
+
+  <div *ngIf="retrieveStudentError == true" style="color: red;">
+    Student ID {{userId}} does not exist!
+  </div>
+
+  <ion-list *ngIf="retrieveStudentError == false && studentToView != null">
+    <ion-list-header>Student Details</ion-list-header>
+    <br>
+    <ion-item>
+      <ion-label><b>Name:</b></ion-label>
+      {{studentToView.name}}
+    </ion-item>
+
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-label><b>Description:</b></ion-label>
+        </ion-row>
+        <br>
+        <ion-row style="float: right;">{{studentToView.description}}</ion-row>
+        <br>
+        <ion-row><br></ion-row>
+      </ion-grid>
+    </ion-item>
+
+    <ion-item>
+      <ion-label><b>Average Rating:</b></ion-label>
+      {{studentToView.avgRating}}
+    </ion-item>
+
+    <ion-item>
+      <ion-label><b>Email:</b></ion-label>
+      {{studentToView.email}}
+    </ion-item>
+
+    <ion-item>
+      <ion-label><b>Skills:</b></ion-label>
+      <ng-container *ngFor="let skill of skills">
+        <ion-chip outline color="primary">
+          <ion-label>{{ skill.title }}</ion-label>
+        </ion-chip>
+      </ng-container>
+    </ion-item>
+
+      <form #addToTeamForm="ngForm" (ngSubmit)="addToTeam(addToTeamForm)">
+
+        <ion-item>
+          <ion-label><b>Team: </b></ion-label>
+            <ion-select style="float: right;" [compareWith]="compareWith" placeholder="Select Team" id="team"
+              team="team" #team="ngModel" [(ngModel)]="teamId" required="true" [ngModelOptions]="{standalone: true}">
+              <ion-select-option *ngFor="let team of teams" value="{{team.teamId}}">{{team.teamName}}
+              </ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-row>
+          <ion-col></ion-col>
+          <ion-col>
+            <ion-button type="submit" ion-button block>
+              Add To Team
+            </ion-button>
+          </ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+
+      </form>
+
+  </ion-list>
+
+</ion-content>
+
+<ion-footer>
+  <ion-title size="small">&copy; 2020 HustlePlus. All rights reserved.</ion-title>
+</ion-footer>

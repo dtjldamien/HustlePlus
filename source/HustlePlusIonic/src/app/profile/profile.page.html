@@ -1,0 +1,191 @@
+<ion-header>
+  <ion-toolbar class="header">
+    <ion-title>{{name}}'s Profile</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-toolbar no-border-top>
+  <ion-segment [(ngModel)]="option">
+    <ion-segment-button value="Profile">
+      About
+    </ion-segment-button>
+    <ion-segment-button value="Skills">
+      Skills
+    </ion-segment-button>
+  </ion-segment>
+</ion-toolbar>
+
+
+<ion-content fullscreen>
+
+  <div [ngSwitch]="option">
+
+    <div *ngSwitchCase="'Profile'">
+      <ion-grid>
+
+
+        <ion-row justify-content-center>
+          <ion-item>
+            <img class="profileimg" src="../../assets/images/student.jpg">
+          </ion-item>
+        </ion-row>
+        <ion-row justify-content-center>
+          <ion-col align-self-center>
+
+            <div padding>
+              <ion-card>
+                <ion-item>
+                  <p style="text-align: center;"><em>"{{description}}"</em></p>
+                </ion-item>
+                <ion-item>
+                  <p><strong>Name :</strong> {{ name }}</p>
+                </ion-item>
+                <ion-item>
+                  <p><strong>Username :</strong> {{ username }}</p>
+                </ion-item>
+                <!-- <ion-item>
+                  <p><strong>Password :</strong> {{ password }}</p>
+                </ion-item> -->
+                <ion-item>
+                  <p><strong>Email :</strong> {{ email }}</p>
+                </ion-item>
+                <ion-item>
+                  <p><strong>Rating :</strong> {{ avgRating }}</p>
+                </ion-item>
+                <ion-item>
+                  <p><strong>Bank Name :</strong> {{ bankAccountName }}</p>
+                </ion-item>
+                <ion-item>
+                  <p><strong>Bank Account :</strong> {{ bankAccountNumber }}</p>
+                </ion-item>
+                <ion-item>
+                  <p *ngIf="isVerified == true"><strong>Verified? :      </strong> <ion-icon style="color:green" slot="icon-only" name="checkmark-circle"></ion-icon></p>
+                  <p *ngIf="isVerified == false"><strong>Verified? :      </strong> <ion-icon style="color:red" slot="icon-only" name="close-circle"></ion-icon></p>
+                </ion-item>
+                <ion-item>
+                  <p><strong>Resume :</strong></p>
+                  <ion-button slot="end" color="medium" (click)="uploadResume()">
+                    <ion-icon slot="icon-only" name="document-outline"></ion-icon> Upload Resume
+                  </ion-button>
+                </ion-item>
+              </ion-card>
+              <ion-toolbar position="bottom">
+                <ion-button color="success" (click)="updateStudentAccount($event, studentToView)">
+                  <ion-icon slot="icon-only" name="pencil-outline"></ion-icon> Update Profile
+                </ion-button>
+                <ion-button color="danger" (click)="deleteStudentAccount($event, studentToView)">
+                  <ion-icon slot="icon-only" name="trash-outline"></ion-icon> Delete Account
+                </ion-button>
+              </ion-toolbar>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </div>
+
+
+    <div *ngSwitchCase="'Skills'">
+
+      <div *ngIf="skills">
+        {{errorMessage}}
+      </div>
+
+      <ion-list-header>My Skillset</ion-list-header>
+<br>
+      <ng-container *ngFor="let skill of skills">
+        <ion-chip outline color="primary" #skill.skillId>
+          <ion-icon name="person"></ion-icon>
+          <ion-label>{{ skill.title }}</ion-label>
+          <button style="background-color: #FFF;" ion-button clear color="danger" (click)="dissociateSkillFromStudent(skill.skillId)">
+            <ion-icon name="close-circle"></ion-icon>
+          </button>
+        </ion-chip>
+      </ng-container>
+
+      <ion-fab horizontal="end" vertical="top" slot="fixed">
+        <ion-fab-button>
+          <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list>
+          <button style="background-color: #FFF;" size="large" (click)="createNewSkillModal($event, studentToView)">
+            <ion-icon name="color-filter">Add New Skill</ion-icon>
+            <ion-text>Add New Skill</ion-text>
+          </button>
+        </ion-fab-list>
+      </ion-fab>
+
+    </div>
+
+
+    <div *ngSwitchDefault>
+      <ion-grid>
+
+
+        <ion-row justify-content-center>
+          <ion-item>
+            <img class="profileimg" src="../../assets/images/student.jpg">
+          </ion-item>
+        </ion-row>
+        <ion-row justify-content-center>
+          <ion-col align-self-center>
+
+            <div padding>
+              <ion-card>
+                <ion-item>
+                  <p style="text-align: center;"><em>"{{description}}"</em></p>
+                </ion-item>
+                <ion-item>
+                  <p><strong>Name :</strong> {{ name }}</p>
+                </ion-item>
+                <ion-item>
+                  <p><strong>Username :</strong> {{ username }}</p>
+                </ion-item>
+                <!-- <ion-item>
+                  <p><strong>Password :</strong> {{ password }}</p>
+                </ion-item> -->
+                <ion-item>
+                  <p><strong>Email :</strong> {{ email }}</p>
+                </ion-item>
+                <ion-item>
+                  <p><strong>Rating :</strong> {{ avgRating }} out of 5 Stars</p>
+                </ion-item>
+                <ion-item>
+                  <p><strong>Bank Name :</strong> {{ bankAccountName }}</p>
+                </ion-item>
+                <ion-item>
+                  <p><strong>Bank Account :</strong> {{ bankAccountNumber }}</p>
+                </ion-item>
+                <ion-item>
+                  <p *ngIf="isVerified == true"><strong>Verified? :      </strong> <ion-icon style="color:green" slot="icon-only" name="checkmark-circle"></ion-icon></p>
+                  <p *ngIf="isVerified == false"><strong>Verified? :      </strong> <ion-icon style="color:red" slot="icon-only" name="close-circle"></ion-icon></p>
+                </ion-item>
+                <ion-item>
+                  <p><strong>Resume :</strong></p>
+                  <ion-button slot="end" color="medium" (click)="uploadResume()">
+                    <ion-icon slot="icon-only" name="document-outline"></ion-icon> Upload Resume
+                  </ion-button>
+                </ion-item>
+              </ion-card>
+              <ion-toolbar position="bottom">
+                <ion-button slot="start" color="success" (click)="updateStudentAccount()">
+                  <ion-icon slot="icon-only" name="pencil-outline"></ion-icon> Update Profile
+                </ion-button>
+                <ion-button slot="end" color="danger" (click)="deleteStudentAccount($event, studentToView)">
+                  <ion-icon slot="icon-only" name="trash-outline"></ion-icon> Delete Account
+                </ion-button>
+              </ion-toolbar>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-title size="small">&copy; 2020 HustlePlus. All rights reserved.</ion-title>
+</ion-footer>

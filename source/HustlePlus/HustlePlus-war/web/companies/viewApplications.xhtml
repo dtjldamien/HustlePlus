@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <ui:define name="content">
+        
+        <h:form id="viewApplicationsForm">
+                <p:messages id="messages" redisplay="false" closable="true" />
+                <p:commandButton immediate="true" value="Back" action="/companies/projectManagement.xhtml?faces-redirect=true"/>
+            
+            <p:dataGrid id="dataGridAllApplications" var="myapp" value="#{getApplicationForProjectManagedBean.applicationsForProject}" columns="2" layout="grid"
+                        rows="2" paginator="true" paginatorPosition="bottom" 
+                        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        rowsPerPageTemplate="6,12,16">
+                <f:facet name="header">
+                    Applications For Project
+                </f:facet>
+                
+                <p:panel header="Application ID: #{myapp.applicationId}" style="text-align: center">
+                    <h:panelGrid columns="2" style="width:100%" columnClasses="label,value">
+                        
+                        <h:outputText value ="Name of Student:"/>
+                        <h:outputText value ="#{myapp.student.name}"/>
+                        
+                        <h:outputText value ="Rating: "/>                        
+                        <h:outputText value ="#{myapp.student.avgRating}">
+                            <f:convertNumber maxFractionDigits="2"/>
+                        </h:outputText>
+                        
+                        
+                        <h:outputText value="Skills of Student: "/>
+                        <p:dataList value="#{myapp.student.skills}" var="skill" type="ordered">
+                            #{skill.title}
+                            </p:dataList>
+                        
+                        <h:outputText value ="Email:"/>
+                        <h:outputText value ="#{myapp.student.email}"/>
+
+                        <h:outputText value="Student Resume: "/>
+                         <p:linkButton icon="ui-icon-arrowthickstop-1-s" href="#{application.contextPath}/uploadedFiles/Bryan_Resume.pdf" />
+                        
+                        <h:outputText value="Application Status: "/>
+                        <p:commandButton icon="ui-icon-info"  ajax="false" actionListener="#{applicationManagementManagedBean.viewApplicationStatus}">
+                            <f:attribute name="applicationToCheck" value="#{myapp}"/>
+                        </p:commandButton>
+                        
+                        <p:commandButton value="Approve Application" actionListener="#{applicationManagementManagedBean.approveApplication}" update="viewApplicationsForm:dataGridAllApplications viewApplicationsForm:messages">
+                            <f:attribute name="applicationToApprove" value="#{myapp}" />
+                            <p:confirm header="Confirmation" message="Are you sure you want to approve application with Application ID: #{myapp.applicationId}?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        
+                        <p:commandButton value="Reject Application" actionListener="#{applicationManagementManagedBean.rejectApplication}" update="viewApplicationsForm:dataGridAllApplications viewApplicationsForm:messages">
+                            <f:attribute name="applicationToReject" value="#{myapp}" />
+                            <p:confirm header="Confirmation" message="Are you sure you want to reject application with Application ID: #{myapp.applicationId}?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                        
+                        
+
+                    </h:panelGrid>
+                      
+                </p:panel>
+ 
+            
+            </p:dataGrid>
+            
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            
+        </h:form>
+        
+        
+        
+        
+        
+        
+        
+    </ui:define>
+
+
+</ui:composition>
+
+        
+        
+        
+

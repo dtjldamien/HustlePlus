@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/defaultTemplate.xhtml"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <ui:define name="content">
+        
+        <h:panelGroup rendered="#{!sessionScope.isLogin}">
+            <article>
+                <center><h2>Please login.</h2></center>
+            </article>
+        </h:panelGroup>
+        
+        <div class="container" style="width: 95%">
+            
+            <h:form id="formAllSkills" rendered="#{sessionScope.isLogin == true}">
+            
+                <p:messages id="messages" redisplay="false" closable="true" />
+
+                <p:dataTable id="dataTableAllSkills" widgetVar="dataTableAllSkills" value="#{projectManagementManagedBean.projectDeleteSkill.skills}" var="skill" rowKey="#{skill.skillId}" rowIndexVar="row"
+                             rows="10" paginator="true" paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+                    
+                    <f:facet name="header">
+                        <p:outputPanel style="text-align: center;">
+                            <h:outputText value="Search " />
+                            <p:inputText id="globalFilter" onkeyup="PF('dataTableAllSkills').filter()" style="width:200px" placeholder=""/>
+                        </p:outputPanel>
+                    </f:facet>
+                    
+                    <p:column headerText="Skill ID" sortBy="#{skill.skillId}" filterBy="#{skill.skillId}" filterMatchMode="contains">
+                        <h:outputText value="#{skill.skillId}" style="float:left" />                    
+                    </p:column>
+                    
+                    <p:column headerText="Skill Name" sortBy="#{skill.title}" filterBy="#{skill.title}" filterMatchMode="contains">
+                        <h:outputText value="#{skill.title}" style="float:left"/>
+                    </p:column>
+                    
+                       
+                    <p:column headerText="Action" >
+                        
+                        <p:commandButton icon="ui-icon-trash" actionListener="#{projectManagementManagedBean.removeSkillFromProject}" update="formAllSkills:dataTableAllSkills formAllSkills:messages">
+                            <f:attribute name="skillToDelete" value="#{skill}" />
+                            <f:attribute name="projectToRemoveFromSkill" value="#{projectManagementManagedBean.projectDeleteSkill}"/>
+                            <p:confirm header="Confirmation" message="Are you sure you want to delete Skill #{skill.title}?" icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </p:column>
+                    
+                    </p:dataTable>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+                
+            </h:form>
+  
+        </div>
+        
+    </ui:define>
+    
+</ui:composition>
+

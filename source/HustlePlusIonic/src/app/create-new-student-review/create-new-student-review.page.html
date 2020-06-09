@@ -1,0 +1,98 @@
+<ion-header>
+  <ion-toolbar class="header">
+    <ion-buttons slot="start">
+      <ion-button class="back" (click)="back()">
+        <ion-icon slot="start" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>
+      Review a Student
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-list-header>Review a Student</ion-list-header>
+    <br>
+    <div *ngIf="infoMessage">
+      {{infoMessage}}
+    </div>
+
+    <div *ngIf="errorMessage">
+      {{errorMessage}}
+    </div>
+
+    <form #createStudentReviewForm="ngForm" (ngSubmit)="create(createStudentReviewForm)">
+
+
+      <ion-item>
+        <ion-label>Project:</ion-label>
+        <ion-select [compareWith]="compareWith" placeholder="Select Project" id="project" name="project"
+          #project="ngModel" [(ngModel)]="projectId" required="true">
+          <ion-select-option *ngFor="let project of projects" value="{{project.projectId}}">{{project.projectName}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+
+
+      <ion-item>
+        <ion-label>Student:</ion-label>
+        <ion-select [compareWith]="compareWith" placeholder="Select Student" id="student" name="student"
+          #student="ngModel" [(ngModel)]="studentId" required="true">
+          <ion-select-option *ngFor="let student of students" value="{{student.userId}}">{{student.email}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label>Rating</ion-label>
+        <ion-icon name="star" *ngFor="let num of [1,2,3,4,5]" (click)="rate(num)" [ngStyle]="{'color':getColor(num)}">
+        </ion-icon>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label>Review Text:</ion-label>
+        <ion-textarea style="text-align: right;" placeholder="Type review here..." type="text" id="reviewText" name="reviewText" [(ngModel)]="newStudentReview.reviewText"
+          required="true" #reviewText="ngModel"></ion-textarea>
+          <br>
+      </ion-item>
+      <div style="float: right;" *ngIf="reviewText.invalid && (reviewText.dirty || reviewText.touched || submitted)" style="color: red;">
+        <div style="float: right;" *ngIf="reviewText.errors.required">
+          Review Text is required
+        </div>
+      </div>
+
+      <br>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col col-6>
+            <ion-button expand="block" (click)="clear()">
+              Clear
+            </ion-button>
+          </ion-col>
+          <ion-col col-6>
+            <ion-button  expand="block" type="submit" ion-button block>
+              Create
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      
+    </form>
+
+  </ion-list>
+
+
+
+
+</ion-content>
+
+<ion-footer>
+  <ion-title size="small">&copy; 2020 HustlePlus. All rights reserved.</ion-title>
+</ion-footer>
